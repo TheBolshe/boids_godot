@@ -28,12 +28,6 @@ func _process(delta: float) -> void:
 		if child.is_class("Area2D"):
 			child.rotation = speed.angle()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
-	
-	set_speed()
-	
-	translate(speed * delta)
 
 func draw_pos() -> void:
 	$Label.text = "%.1f %.1f" % [position.x, position.y]
@@ -58,7 +52,7 @@ func set_speed() -> void:
 	
 	if neighbours.size() > 0:
 		for neighbour: Boid in neighbours:
-			var target: Area2D = neighbour.get_node("Wrap2D").get_overlapping_clone(vision)
+			var target: Area2D = neighbour.get_node("Wrap2D").get_overlapping_clone(vision, "body")
 			var dist: Vector2 = self.global_position - target.global_position
 			separation_force += dist * exp(dist.length() * -0.1)
 			alignement_force += neighbour.speed

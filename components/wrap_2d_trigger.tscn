@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://mafgqyyqfdjb"]
+
+[ext_resource type="Script" uid="uid://c62o2jtull1su" path="res://components/wrap_2d_trigger.gd" id="1_ng8fb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k3iru"]
+size = Vector2(504, 510)
+
+[node name="Wrap2DTrigger" type="Node2D" unique_id=1415871292]
+script = ExtResource("1_ng8fb")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=128355048]
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=498407139]
+position = Vector2(356, 344)
+shape = SubResource("RectangleShape2D_k3iru")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]
