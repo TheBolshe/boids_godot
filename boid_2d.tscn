@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dn3crwwvv0fkp"]
 
-[ext_resource type="Script" uid="uid://oqj3ojfjgy8m" path="res://boid.gd" id="1_xur1n"]
+[ext_resource type="Script" uid="uid://oqj3ojfjgy8m" path="res://boid_2d.gd" id="1_b64ly"]
 [ext_resource type="Texture2D" uid="uid://df3psgi4eafh8" path="res://boid.png" id="2_rwlh6"]
 [ext_resource type="PackedScene" uid="uid://cuj6dyknam8xk" path="res://components/wrap_2d.tscn" id="3_dg2sk"]
 
@@ -8,8 +8,8 @@
 radius = 88.0
 height = 220.0
 
-[node name="Boid" type="Node2D" unique_id=1750465424 groups=["boids"]]
-script = ExtResource("1_xur1n")
+[node name="Boid2D" type="Node2D" unique_id=1750465424 groups=["boids"]]
+script = ExtResource("1_b64ly")
 metadata/_edit_group_ = true
 
 [node name="Vision" type="Area2D" parent="." unique_id=362954567]

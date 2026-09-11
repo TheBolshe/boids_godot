@@ -1,8 +1,8 @@
 extends Node2D
-class_name Boid
+class_name Boid2D
 
-@export var min_speed : int = 100
-@export var max_speed : int = 300
+static var min_speed : int = 100
+static var max_speed : int = 300
 @export_range(0, PI) var rotation_speed : float = PI/2
 
 static var separation : float = 1
@@ -12,7 +12,7 @@ static var cohesion : float = 1
 var accel : Vector2 = Vector2.ZERO 
 var speed : Vector2 = Vector2.ZERO
 
-var neighbours : Array[Boid]
+var neighbours : Array[Boid2D]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -51,7 +51,7 @@ func set_speed() -> void:
 	var vision: Area2D = $Vision
 	
 	if neighbours.size() > 0:
-		for neighbour: Boid in neighbours:
+		for neighbour: Boid2D in neighbours:
 			var target: Area2D = neighbour.get_node("Wrap2D").get_overlapping_clone(vision, "body")
 			var dist: Vector2 = self.global_position - target.global_position
 			separation_force += dist * exp(dist.length() * -0.1)

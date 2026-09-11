@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://dywx01thpcr7l"]
+
+[node name="Boid2DManager" type="Node2D" unique_id=1418095369]
