@@ -38,43 +38,6 @@ func draw_speed()-> void:
 	$Line2D.add_point(speed)
 	$Line2D.global_rotation = 0 #you'll need this because Line2D will rotate together with a body
 
-
-func set_speed() -> void:
-	speed *= 0.97
-	accel *= 0.95
-	
-	var separation_force = Vector2.ZERO
-	var alignement_force = Vector2.ZERO
-	var cohesion_force = Vector2.ZERO
-	#var border_force = Vector2.ZERO
-	
-	var vision: Area2D = $Vision
-	
-	if neighbours.size() > 0:
-		for neighbour: Boid2D in neighbours:
-			var target: Area2D = neighbour.get_node("Wrap2D").get_overlapping_clone(vision, "body")
-			var dist: Vector2 = self.global_position - target.global_position
-			separation_force += dist * exp(dist.length() * -0.1)
-			alignement_force += neighbour.speed
-			cohesion_force += target.global_position - self.global_position
-		alignement_force /= neighbours.size()
-		cohesion_force /= neighbours.size()
-	
-	if separation_force.length() > 0:
-		accel += separation_force.normalized() * separation
-	if alignement_force.length() > 0:
-		accel += alignement_force.normalized() * alignement
-	if cohesion_force.length() > 0:
-		accel += cohesion_force.normalized() * cohesion
-	
-	speed += accel
-	
-	if speed.length() < min_speed:
-		speed = speed.normalized() * min_speed
-	if speed.length() > max_speed:
-		speed = speed.normalized() * max_speed
-
-
 func _on_vision_area_entered(area: Area2D) -> void:
 	if area.get_parent() != self:
 		neighbours.push_back(area.get_parent())

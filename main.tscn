@@ -4,11 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://dn3crwwvv0fkp" path="res://boid_2d.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://di63vqm4loknt" path="res://hud.tscn" id="3_h2yge"]
 [ext_resource type="PackedScene" uid="uid://mafgqyyqfdjb" path="res://components/wrap_2d_trigger.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dywx01thpcr7l" path="res://boid_2d_manager.tscn" id="5_lquwl"]
 
 [node name="Main" type="Node" unique_id=832726152]
 script = ExtResource("1_ig7tw")
-boid_scene = ExtResource("2_0xm2m")
-boids_number = 100
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=793003355]
 offset_right = 700.0
@@ -18,6 +17,12 @@ color = Color(0.08235294, 0.08235294, 0.6117647, 0.73333335)
 [node name="HUD" parent="." unique_id=249667681 instance=ExtResource("3_h2yge")]
 
 [node name="Wrap2DTrigger" parent="." unique_id=1415871292 instance=ExtResource("4_1bvp3")]
+
+[node name="Boid2DManager" parent="." unique_id=1418095369 instance=ExtResource("5_lquwl")]
+boid_scene = ExtResource("2_0xm2m")
+separation = 2.895
+alignement = 2.496
+cohesion = 4.259
 
 [connection signal="alignement_value_change" from="HUD" to="." method="_on_hud_alignement_value_change"]
 [connection signal="cohesion_value_change" from="HUD" to="." method="_on_hud_cohesion_value_change"]
