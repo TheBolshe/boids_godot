@@ -14,6 +14,7 @@ metadata/_edit_group_ = true
 
 [node name="Vision" type="Area2D" parent="." unique_id=362954567]
 collision_layer = 0
+input_pickable = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Vision" unique_id=1295439696]
