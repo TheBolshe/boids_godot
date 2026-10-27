@@ -12,6 +12,15 @@ var boids: Array[Boid2D] = []
 @export_range(0, 10) var alignement : float = 1
 @export_range(0, 10) var cohesion : float = 1
 
+var THREAD_COUNT = 10
+var chunk_size = 0
+
+var results : Array[Boid2DData]
+var threads : Array[Thread]
+var work_semaphores : Array[Semaphore]
+var done_semaphore : Semaphore
+var stop = false
+
 class Boid2DData:
 	var position: Vector2
 	var speed: Vector2
@@ -20,21 +29,18 @@ class Boid2DData:
 
 ## Build and return a Boid2DData array with information needed to compute forces.
 ## For each boid copies its position, speed, accel and neghbours speed and position
-func _build_data() -> Array[Boid2DData]:
-	var data_array: Array[Boid2DData] = []
-	for boid: Boid2D in boids:
-		var data: Boid2DData = Boid2DData.new()
-		data.position = boid.global_position
-		data.speed = boid.speed
-		data.accel = boid.accel
-		data.neighbours = []
-		for neighbour in boid.neighbours:
-			var neighbour_data: Boid2DData = Boid2DData.new()
-			neighbour_data.position = neighbour.global_position
-			neighbour_data.speed = neighbour.get_parent().speed
-			data.neighbours.push_back(neighbour_data)
-		data_array.push_back(data)
-	return data_array
+func _build_data(boid: Boid2D) -> Boid2DData:
+	var data: Boid2DData = Boid2DData.new()
+	data.position = boid.safe_position
+	data.speed = boid.speed
+	data.accel = boid.accel
+	data.neighbours = []
+	for neighbour in boid.neighbours:
+		var neighbour_data: Boid2DData = Boid2DData.new()
+		neighbour_data.position = neighbour.safe_global_position
+		neighbour_data.speed = neighbour.get_parent().speed
+		data.neighbours.push_back(neighbour_data)
+	return data
 
 ## Update the passed Boid2DData array
 func _calculate_forces(data: Boid2DData)-> void:
@@ -70,6 +76,19 @@ func _calculate_forces(data: Boid2DData)-> void:
 	if data.speed.length() > max_speed:
 		data.speed = data.speed.normalized() * max_speed
 
+func thread_work(thread_id: int) -> void:
+	while true:
+		work_semaphores[thread_id].wait()
+		if stop:
+			break
+		var start = thread_id * chunk_size
+		var end = mini(start + chunk_size, boids.size())
+		for i in range(start, end):
+			var data = _build_data(boids[i])
+			_calculate_forces(data)
+			results[i] = data
+		done_semaphore.post()
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for i in boids_number:
@@ -79,14 +98,32 @@ func _ready() -> void:
 		boid.speed = Vector2.UP.rotated(angle).normalized() * randi_range(min_speed, max_speed)
 		add_child(boid)
 		boids.push_back(boid)
+		
+	chunk_size = ceili(float(boids.size()) / THREAD_COUNT)
+	results.resize(boids.size())
+	done_semaphore = Semaphore.new()
+	for i in THREAD_COUNT:
+		work_semaphores.push_back(Semaphore.new())
+		threads.push_back(Thread.new())
+		threads[i].start(thread_work.bind(i))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var data: Array[Boid2DData] = _build_data()
+	for i in THREAD_COUNT:
+		work_semaphores[i].post()
+	for i in THREAD_COUNT:
+		done_semaphore.wait()
+	
 	for i in boids.size():
-		_calculate_forces(data[i])
-		boids[i].speed = data[i].speed
-		boids[i].accel = data[i].accel
+		boids[i].speed = results[i].speed
+		boids[i].accel = results[i].accel
 	
 	for boid: Boid2D in boids:
 		boid.translate(boid.speed * delta)
+
+func _exit_tree() -> void:
+	stop = true
+	for i in THREAD_COUNT:
+		work_semaphores[i].post()
+	for t in threads:
+		t.wait_to_finish()

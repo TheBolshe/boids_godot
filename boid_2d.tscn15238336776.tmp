@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dn3crwwvv0fkp"]
+
+[ext_resource type="Script" uid="uid://oqj3ojfjgy8m" path="res://boid_2d.gd" id="1_b64ly"]
+[ext_resource type="Script" uid="uid://dt7knp07hgpjw" path="res://body.gd" id="2_2cn0e"]
+[ext_resource type="Texture2D" uid="uid://df3psgi4eafh8" path="res://boid.png" id="2_rwlh6"]
+[ext_resource type="PackedScene" uid="uid://cuj6dyknam8xk" path="res://components/wrap_2d.tscn" id="3_dg2sk"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1bvp3"]
+radius = 88.0
+height = 220.0
+
+[node name="Boid2D" type="Node2D" unique_id=1750465424 groups=["boids"]]
+script = ExtResource("1_b64ly")
+metadata/_edit_group_ = true
+
+[node name="Vision" type="Area2D" parent="." unique_id=362954567]
+physics_interpolation_mode = 2
+collision_layer = 0
+input_pickable = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vision" unique_id=1295439696]
+position = Vector2(50, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_1bvp3")
+
+[node name="Body" type="Area2D" parent="." unique_id=1932434283 groups=["body"]]
+physics_interpolation_mode = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_2cn0e")
+
+[node name="Sprite" type="Sprite2D" parent="Body" unique_id=1279486610]
+rotation = 1.5707964
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_rwlh6")
+metadata/_edit_lock_ = true
+
+[node name="Hitbox" type="CollisionPolygon2D" parent="Body" unique_id=1496744959]
+polygon = PackedVector2Array(-10, -5, 9, 0, -10, 5)
+metadata/_edit_lock_ = true
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1070204171]
+width = 1.0
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="." unique_id=377063186]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 10
+metadata/_edit_lock_ = true
+
+[node name="Wrap2D" parent="." unique_id=1951103469 instance=ExtResource("3_dg2sk")]
+
+[connection signal="area_entered" from="Vision" to="." method="_on_vision_area_entered"]
+[connection signal="area_exited" from="Vision" to="." method="_on_vision_area_exited"]
