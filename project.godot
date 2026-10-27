@@ -29,6 +29,7 @@ version_control/autoload_on_startup=true
 
 [physics]
 
+2d/run_on_separate_thread=true
 3d/physics_engine="Jolt Physics"
 
 [rendering]

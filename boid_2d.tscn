@@ -13,6 +13,7 @@ script = ExtResource("1_b64ly")
 metadata/_edit_group_ = true
 
 [node name="Vision" type="Area2D" parent="." unique_id=362954567]
+physics_interpolation_mode = 2
 collision_layer = 0
 input_pickable = false
 monitorable = false
@@ -23,6 +24,7 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_1bvp3")
 
 [node name="Body" type="Area2D" parent="." unique_id=1932434283 groups=["body"]]
+physics_interpolation_mode = 2
 collision_mask = 0
 monitoring = false
 

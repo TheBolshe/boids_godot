@@ -7,10 +7,10 @@ extends Node2D
 		if value != enabled:
 			if value:
 				enabled = true
-				create_clones()
+				call_deferred("enable_clones")
 			else: 
 				enabled = false
-				remove_clones()
+				call_deferred("disable_clones")
 
 var parent : Node2D
 var screen_size : Vector2
@@ -39,21 +39,23 @@ func remove_clones() -> void:
 	for child in parent.get_children():
 		if child.is_in_group("clone"):
 			child.queue_free()
-
-func get_overlapping_clone(area: Area2D, group: String) -> Area2D:
+			
+func disable_clones() -> void:
 	for child in parent.get_children():
-		if child.is_in_group(group) && area.overlaps_area(child):
-			return child
-	return
-
-func test():
-	pass
+		if child.is_in_group("clone"):
+			child.get_node("Hitbox").disabled = true
+			
+func enable_clones() -> void:
+	for child in parent.get_children():
+		if child.is_in_group("clone"):
+			child.get_node("Hitbox").disabled = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	parent = self.get_parent()
 	update_screen_size()
 	get_viewport().size_changed.connect(update_screen_size)
+	create_clones()
 	enabled = true
 	
 func _process(_delta: float) -> void:

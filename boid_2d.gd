@@ -4,7 +4,7 @@ class_name Boid2D
 var accel : Vector2 = Vector2.ZERO 
 var speed : Vector2 = Vector2.ZERO
 
-var neighbours : Array[Boid2D]
+var neighbours : Array[Area2D]
 
 
 func _process(delta: float) -> void:
@@ -15,8 +15,8 @@ func _process(delta: float) -> void:
 
 func _on_vision_area_entered(area: Area2D) -> void:
 	if area.get_parent() != self:
-		neighbours.push_back(area.get_parent())
+		neighbours.push_back(area)
 
 
 func _on_vision_area_exited(area: Area2D) -> void:
-	neighbours.erase(area.get_parent())
+	neighbours.erase(area)

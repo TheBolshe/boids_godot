@@ -29,13 +29,9 @@ func _build_data() -> Array[Boid2DData]:
 		data.accel = boid.accel
 		data.neighbours = []
 		for neighbour in boid.neighbours:
-			# Get current boid Vision Area2D then determine which one of the neighbour Area2D body
-			# clones is overlapping it
-			var vision: Area2D = boid.get_node("Vision")
-			var target: Area2D = neighbour.get_node("Wrap2D").get_overlapping_clone(vision, "body")
 			var neighbour_data: Boid2DData = Boid2DData.new()
-			neighbour_data.position = target.global_position
-			neighbour_data.speed = neighbour.speed
+			neighbour_data.position = neighbour.global_position
+			neighbour_data.speed = neighbour.get_parent().speed
 			data.neighbours.push_back(neighbour_data)
 		data_array.push_back(data)
 	return data_array
