@@ -12,15 +12,15 @@ extends Node2D
 				enabled = false
 				call_deferred("disable_clones")
 
-var parent : Node2D
-var screen_size : Vector2
+var parent: Node2D
+var screen_size: Vector2
 
 
-func update_screen_size() -> void :
+func update_screen_size() -> void:
 	screen_size = get_viewport().get_visible_rect().size
 
 func create_clones() -> void:
-	var body : Area2D = (func(node : Node2D):
+	var body: Area2D = (func(node: Node2D):
 		for child in node.get_children():
 			if child.name == "Body":
 				return child
@@ -30,7 +30,7 @@ func create_clones() -> void:
 		for row in range(-1, 2, 1):
 			if col == 0 and row == 0:
 				continue
-			var clone : Area2D = body.duplicate()
+			var clone: Area2D = body.duplicate()
 			clone.add_to_group("clone")
 			clone.position += Vector2(col, row) * screen_size
 			parent.call_deferred("add_child", clone)

@@ -1,11 +1,11 @@
 extends Node2D
 class_name Boid2D
 
-var safe_position : Vector2
-var accel : Vector2 = Vector2.ZERO
-var speed : Vector2 = Vector2.ZERO
+var safe_position: Vector2
+var accel: Vector2 = Vector2.ZERO
+var speed: Vector2 = Vector2.ZERO
 
-var neighbours : Array[Area2D]
+var neighbours: Array[Area2D]
 
 func _process(delta: float) -> void:
 	$Vision.rotation = speed.angle()

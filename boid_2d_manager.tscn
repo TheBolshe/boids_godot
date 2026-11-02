@@ -4,4 +4,4 @@
 
 [node name="Boid2DManager" type="Node2D" unique_id=1418095369]
 script = ExtResource("1_t8s5q")
-boids_number = 300
+boids_number = 150
